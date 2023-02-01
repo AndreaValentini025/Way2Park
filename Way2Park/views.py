@@ -1,10 +1,12 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
+from django.views import generic
 from django.views.decorators.csrf import csrf_exempt
+from .models import Parcheggio
 
 def index(request):
     print('Request for index page received')
-    return render(request, 'hello_azure/index.html')
+    return render(request, 'Way2Park/index.html')
 
 @csrf_exempt
 def hello(request):
@@ -17,6 +19,12 @@ def hello(request):
         else:
             print("Request for hello page received with name=%s" % name)
             context = {'name': name }
-            return render(request, 'hello_azure/hello.html', context)
+            return render(request, 'Way2Park/hello.html', context)
     else:
         return redirect('index')
+
+
+class ParcheggiListView(generic.ListView):
+    model = Parcheggio
+    template_name = 'Way2Park/homepage.html'
+    context_object_name = 'lista_parcheggi'
