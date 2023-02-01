@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="WebServers">
+    <option name="servers">
+      <webServer id="8a10d14f-5873-4788-a634-e65bc9631746" name="AzureApp" url="https://way2park.azurewebsites.net">
+        <fileTransfer rootFolder="/site/wwwroot" accessType="FTPS" host="waws-prod-blu-403.ftp.azurewebsites.windows.net" port="21">
+          <advancedOptions>
+            <advancedOptions dataProtectionLevel="Private" passiveMode="true" shareSSLContext="true" />
+          </advancedOptions>
+        </fileTransfer>
+      </webServer>
+    </option>
+  </component>
+</project>
