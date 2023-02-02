@@ -13,7 +13,8 @@ The application was built using Django and is available at https://way2park.azur
 To run the server on linux use:
 
 ```bash
-python manage.py runserver
+chmod a+x manage.py
+./manage.py runserver
 ```
 
 
