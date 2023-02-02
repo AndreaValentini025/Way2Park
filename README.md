@@ -9,3 +9,17 @@ The application was built using Django and is available at https://way2park.azur
 *Try Way2Park today and make parking a hassle-free experience!*
 
 
+
+To run the server on linux use:
+
+```bash
+python manage.py runserver
+```
+
+
+To run the server on Windows use:
+
+```bash
+py manage.py runserver
+```
+
