@@ -20,7 +20,7 @@ class Parcheggio(models.Model):
 
 
 class MetodoPagamento(models.Model):
-    carta = models.CharField(max_length=16)
+    carta = models.CharField(max_length=16, unique=True)
     saldo = models.DecimalField(default=50, decimal_places=2, max_digits=5)
 
     def pagamento(self,spesa):
@@ -28,8 +28,8 @@ class MetodoPagamento(models.Model):
 
 
 class Targa(models.Model):
-    targa = models.CharField(max_length=7)
-    metodo_pagamento = models.ForeignKey(MetodoPagamento, on_delete=models.CASCADE)
+    targa = models.CharField(max_length=7, unique=True)
+    metodo_pagamento = models.ForeignKey(MetodoPagamento, on_delete=models.CASCADE, null=True)
 
 
 class Posteggio(models.Model):

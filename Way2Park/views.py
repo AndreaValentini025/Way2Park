@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from django.views import generic
 from django.views.decorators.csrf import csrf_exempt
-from .models import Parcheggio
+from .models import Parcheggio,MetodoPagamento,Targa
 
 def index(request):
     print('Request for index page received')
@@ -28,3 +28,23 @@ class ParcheggiListView(generic.ListView):
     model = Parcheggio
     template_name = 'Way2Park/homepage.html'
     context_object_name = 'lista_parcheggi'
+
+
+def formAssociaTargaMP(request):
+    return render(request, 'Way2Park/targa_mp_form.html')
+
+
+def associazione(request):
+    carta, created = MetodoPagamento.objects.get_or_create(carta__exact=request.POST['ncarta'])
+    carta.carta = request.POST['ncarta']
+    carta.save()
+    targa,created = Targa.objects.get_or_create(targa__exact=request.POST['ntarga'])
+    targa.targa = request.POST['ntarga']
+    targa.metodo_pagamento = carta
+    print(targa.metodo_pagamento)
+    targa.save()
+    return redirect('index')
+
+
+class AssociaTargaMPView(generic.CreateView):
+    model = Targa
