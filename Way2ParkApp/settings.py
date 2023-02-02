@@ -38,7 +38,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'Way2Park'
+    'Way2Park',
+    'leaflet'
 ]
 
 MIDDLEWARE = [
@@ -128,3 +129,13 @@ STATIC_URL = 'static/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 CSRF_TRUSTED_ORIGINS = ['https://way2park.azurewebsites.net']
+
+
+LEAFLET_CONFIG = {
+    'DEFAULT_ZOOM': 15,
+    'DEFAULT_CENTER':   (44.698993, 10.629686),
+    'MIN_ZOOM': 3,
+    'MAX_ZOOM': 18,
+    'TILES': 'http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+    'RESET_VIEW': False,
+}
