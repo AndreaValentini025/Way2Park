@@ -1,0 +1,34 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+
+    <title>Form per inserimento dati</title>
+  </head>
+  <body>
+  <style>
+
+  </style>
+
+
+    <img src="{% static 'images/logo_W2P.png' %}" class="animate__animated  animate__zoomOut animate__delay-1s"/>
+
+
+    <form method="POST" action="associazione">
+        {% csrf_token %}
+      <label for="ntarga">Numero di targa:</label>
+      <input type="text" id="ntarga" name="ntarga" maxlength="7">
+
+      <br><br>
+
+      <label for="ncarta">Numero di carta di credito:</label>
+      <input type="text" id="ncarta" name="ncarta" pattern="\S+">
+
+      <br><br>
+
+      <input type="submit" value="Invia">
+    </form>
+  </body>
+</html>

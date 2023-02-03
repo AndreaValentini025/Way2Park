@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <style>
+        body{
+            background-color: #1c3357;
+            font-family: Arial, sans-serif;
+        }
+        .container{
+            width: 500px;
+            margin: 50px auto;
+            text-align: center;
+        }
+        .form-group{
+            margin: 30px 0;
+        }
+        label{
+            color: #fff;
+            font-weight: bold;
+        }
+        input[type="text"], input[type="password"], input[type="date"]{
+            width: 100%;
+            padding: 10px;
+            font-size: 16px;
+            border: 1px solid #4ca4dc;
+            border-radius: 5px;
+            margin-top: 10px;
+            color: #333;
+        }
+        .btn{
+            padding: 10px 20px;
+            background-color: #4ca4dc;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <form method="POST" action="associazione">
+            {% csrf_token %}
+            <div class="form-group">
+                <label for="ntarga">Targa</label>
+                <input type="text" id="targa" name="ntarga" maxlength="7">
+            </div>
+            <div class="form-group">
+                <label for="ncarta">Numero Carta di Credito</label>
+                <input type="text" id="card-number" name="ncarta" pattern="\S+">
+            </div>
+            <div class="form-group">
+                <label for="cvv">CVV</label>
+                <input type="password" id="cvv" name="cvv">
+            </div>
+            <div class="form-group">
+                <label for="scadenza">Data di Scadenza</label>
+                <input type="date" id="scadenza" name="scadenza">
+            </div>
+            <div class="form-group">
+                <button class="btn" type="button" onclick="history.back()">Indietro</button>
+                <button class="btn" type="submit">Invia</button>
+            </div>
+        </form>
+    </div>
+</body>
+</html>
