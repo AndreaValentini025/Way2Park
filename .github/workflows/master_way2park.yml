@@ -2,7 +2,9 @@
 # More GitHub Actions for Azure: https://github.com/Azure/actions
 # More info on Python, GitHub Actions, and Azure App Service: https://aka.ms/python-webapps-actions
 
+
 name: Build and deploy Python app to Azure Web App - Way2Park
+
 
 on:
   push:
@@ -60,4 +62,5 @@ jobs:
         with:
           app-name: 'Way2Park'
           slot-name: 'Production'
-          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_13F7AFC6CEAD4C13AC1450203174E4DF }}
+          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_29A02CAAAA1A4DD09411C232FADD34DA }}
+
