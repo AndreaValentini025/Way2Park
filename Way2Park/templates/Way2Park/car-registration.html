@@ -42,14 +42,15 @@
 </head>
 <body>
     <div class="container">
-        <form>
+        <form method="POST" action="associazione">
+            {% csrf_token %}
             <div class="form-group">
-                <label for="targa">Targa</label>
-                <input type="text" id="targa" name="targa">
+                <label for="ntarga">Targa</label>
+                <input type="text" id="targa" name="ntarga" maxlength="7">
             </div>
             <div class="form-group">
-                <label for="card-number">Numero Carta di Credito</label>
-                <input type="text" id="card-number" name="card-number">
+                <label for="ncarta">Numero Carta di Credito</label>
+                <input type="text" id="card-number" name="ncarta" pattern="\S+">
             </div>
             <div class="form-group">
                 <label for="cvv">CVV</label>
@@ -60,7 +61,7 @@
                 <input type="date" id="scadenza" name="scadenza">
             </div>
             <div class="form-group">
-                <button class="btn" type="button">Indietro</button>
+                <button class="btn" type="button" onclick="history.back()">Indietro</button>
                 <button class="btn" type="submit">Invia</button>
             </div>
         </form>

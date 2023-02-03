@@ -1,11 +1,12 @@
 <!DOCTYPE html>
 {% load leaflet_tags %}
+{% load static %}
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="theme-color" content="#000000">
     <title>Title</title>
-    <link rel="stylesheet" href="/static/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="{% static 'bootstrap/css/bootstrap.min.css'%}">
     {% leaflet_js %}
     {% leaflet_css %}
 
@@ -71,7 +72,7 @@
         .btn{
             width: 90%;
             height: 90%;
-            background: url('../../../static/creditcard.svg') no-repeat 0 0;
+            background: url('{% static 'creditcard.svg'%}' ) no-repeat 0 0;
             margin: 5%;
         }
 
@@ -88,7 +89,7 @@
 
             map.removeControl(map.zoomControl);
             const customPositionMarkerIcon = L.icon({
-                iconUrl: '../../../../static/position.svg',
+                iconUrl: '{% static 'position.svg'%}',
                 iconAnchor: [29.5, 29.5]
             })
             navigator.geolocation.getCurrentPosition(function(position) {
@@ -97,7 +98,7 @@
             });
 
             const customIcon = L.icon({
-                iconUrl: '../../../../static/parkIcon.png',
+                iconUrl: '{% static 'parkIcon.png'%}',
                 iconSize: [30, 50]
             });
 
@@ -121,7 +122,7 @@
     </div>
 
     <div class="credit-card-button-container">
-        <button class="btn"></button>
+        <button class="btn" onclick="{% url 'Way2Park:link' %}"></button>
     </div>
 
     {% leaflet_map "main"%}

@@ -31,7 +31,7 @@ class ParcheggiListView(generic.ListView):
 
 
 def formAssociaTargaMP(request):
-    return render(request, 'Way2Park/targa_mp_form.html')
+    return render(request, 'Way2Park/car-registration.html')
 
 
 def associazione(request):
@@ -43,7 +43,7 @@ def associazione(request):
     targa.metodo_pagamento = carta
     print(targa.metodo_pagamento)
     targa.save()
-    return redirect('index')
+    return redirect('homepage')
 
 
 class AssociaTargaMPView(generic.CreateView):
