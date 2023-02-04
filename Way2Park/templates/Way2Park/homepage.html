@@ -10,6 +10,10 @@
     {% leaflet_js %}
     {% leaflet_css %}
 
+    <link rel="stylesheet" href="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.css" />
+    <script src="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.js"></script>
+
+
     <style>
 
 
@@ -107,6 +111,12 @@
             {% endfor %}
 
 
+            L.Control.geocoder({
+                defaultMarkGeocode: false,
+                geocoder: L.Control.Geocoder.nominatim()
+            }).addTo(map);
+
+
         }, false);
     </script>
 
@@ -117,9 +127,11 @@
 <body class="fullscreen">
 <div class="leaflet-container fullscreen">
 
+
     <div class="toolbar">
         <input type="text" placeholder="Cerca la tua Destinazione" class="toolbar-input">
     </div>
+
 
     <div class="credit-card-button-container">
         <button class="btn" onclick="window.location='link';"></button>
