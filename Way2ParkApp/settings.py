@@ -133,6 +133,4 @@ LEAFLET_CONFIG = {
     'RESET_VIEW': False,
 }
 
-
-os.environ["PATH"] += os.pathsep + BASE_DIR + '\\antenv\\lib\\site-packages\\osgeo'
-
+os.environ["PATH"] += os.pathsep + str(BASE_DIR) + '\\antenv\\lib\\site-packages\\osgeo'
