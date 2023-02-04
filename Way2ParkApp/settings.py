@@ -134,6 +134,6 @@ LEAFLET_CONFIG = {
 }
 
 
-GDAL_LIBRARY_PATH = '/tmp/8db068aa81855d2/antenv/lib/python3.10/site-packages/osgeo'
+GDAL_LIBRARY_PATH = '/tmp/8db068aa81855d2/antenv/lib/python3.10/site-packages/'
 
 # os.environ["PATH"] += os.pathsep + str(BASE_DIR) + '\\antenv\\lib\\site-packages\'
