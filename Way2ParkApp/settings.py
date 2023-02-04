@@ -134,6 +134,4 @@ LEAFLET_CONFIG = {
 }
 
 
-GDAL_LIBRARY_PATH = '/usr/include/gdal'
-
 # os.environ["PATH"] += os.pathsep + str(BASE_DIR) + '\\antenv\\lib\\site-packages\'
