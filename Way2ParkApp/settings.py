@@ -132,6 +132,3 @@ LEAFLET_CONFIG = {
     'TILES': 'http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
     'RESET_VIEW': False,
 }
-
-
-# os.environ["PATH"] += os.pathsep + str(BASE_DIR) + '\\antenv\\lib\\site-packages\'
