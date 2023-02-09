@@ -46,8 +46,7 @@
         }
 
         .toolbar-input{
-            width: 60vw;
-            margin-right: 10vw;
+            width: 70vw;
             height: 60%;
             border: none;
             border-bottom: 2px solid #4ca4dc;
@@ -56,13 +55,7 @@
             background: transparent;
 
         }
-        .clear-button{
-            width: 35px;
-            height: 35px;
-            background: #4ca4dc;
-            margin-right: 3vw;
-            border-radius: 5px;
-        }
+
 
         input:focus,
         select:focus,
@@ -82,11 +75,33 @@
             border-radius: 10px;
         }
 
-        .btn{
+        .confirm-dest-button-container{
+            visibility: hidden;
+            position: absolute;
+            width: 75px;
+            height: 75px;
+            z-index: 1000;
+            bottom: 5vh;
+            left: 5vh;
+            background-color: #1c3357;
+            border-radius: 10px;
+        }
+
+        .btn-confirm{
+            width: 80%;
+            height: 80%;
+            background: url('{% static 'parkingIcon.svg'%}' ) no-repeat 0 0;
+            margin: 10%;
+            border: none;
+            background-size: 100%;
+        }
+
+        .btn-credit{
             width: 90%;
             height: 90%;
             background: url('{% static 'creditcard.svg'%}' ) no-repeat 0 0;
             margin: 5%;
+            border: none;
         }
 
 
@@ -136,8 +151,6 @@
                         class="toolbar-input"
                         placeholder="Search ..."
                     />
-                    <div class="auto-clear clear-button">
-                    </div>
                 </div>`;
 
 
@@ -295,6 +308,9 @@
 
                     // add class to marker
                     L.DomUtil.addClass(marker._icon, "leaflet-marker-locate");
+
+                    document.getElementById("dest-confirm").style.visibility = "visible"
+
                 },
 
                 // the method presents no results
@@ -334,10 +350,13 @@
     -->
 
 
+    <div id="dest-confirm" class="confirm-dest-button-container">
+        <button class="btn-confirm"></button>
+    </div>
 
 
     <div class="credit-card-button-container">
-        <button class="btn" onclick="window.location='link';"></button>
+        <button class="btn-credit" onclick="window.location='link';"></button>
     </div>
 
     {% leaflet_map "main"%}
