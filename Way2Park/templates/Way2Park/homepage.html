@@ -104,6 +104,29 @@
             border: none;
         }
 
+        .auto-results-wrapper{
+            position: absolute;
+            top: calc(100% + 5px);
+            border: 1px solid #858585;
+        }
+
+        .popup-marker{
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            border-radius: 10px;
+            width: 60vw;
+            height: 40vh;
+            background-color: #1c3357;
+            color: #4ca4dc;
+            z-index: 1500;
+            display: grid;
+            grid-template-rows: 2fr 1fr 1fr ;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+        }
 
 
 
@@ -111,6 +134,7 @@
 
 
     <script>
+
 
         let searchedLat;
         let searchedLong;
@@ -128,6 +152,7 @@
             navigator.geolocation.getCurrentPosition(function(position) {
                 map.setView([position.coords.latitude, position.coords.longitude]);
                 L.marker([position.coords.latitude, position.coords.longitude],{icon: customPositionMarkerIcon}).addTo(map);
+
             });
 
             const customIcon = L.icon({
@@ -135,9 +160,27 @@
                 iconSize: [30, 50]
             });
 
+
             {% for p in lista_parcheggi %}
-                L.marker([ {{ p.lat }}, {{ p.long }}], {icon: customIcon}).addTo(map);
+
+                var disponibili = {{ p.capienza }} - {{ p.occupazione }};
+
+                var popupContent = `
+                <div class="popup-marker" id="popup">
+                    <h1 style:"margin-top:5px;">Indirizzo:<br>{{ p.indirizzo }}</h1>
+                    <p>Disponibilità:<br>` + disponibili.toString() + `/{{ p.capienza }}</p>
+                    <p>Tariffa Oraria:<br> {{ p.costo }} €</p>
+                </div>`;
+
+                var marker = L.marker([{{ p.lat}}, {{p.long}}], {icon: customIcon}).addTo(map);
+                marker.bindPopup(popupContent);
+                marker.on('click', function (){
+                    map.setView([{{ p.lat }}, {{ p.long }}], 15);
+                })
+
             {% endfor %}
+
+
 
 
             //const buttonTemplate = `<div class="leaflet-search" style="height: 15px; width: 15px"><svg version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"><path d="M31.008 27.231l-7.58-6.447c-0.784-0.705-1.622-1.029-2.299-0.998 1.789-2.096 2.87-4.815 2.87-7.787 0-6.627-5.373-12-12-12s-12 5.373-12 12 5.373 12 12 12c2.972 0 5.691-1.081 7.787-2.87-0.031 0.677 0.293 1.515 0.998 2.299l6.447 7.58c1.104 1.226 2.907 1.33 4.007 0.23s0.997-2.903-0.23-4.007zM12 20c-4.418 0-8-3.582-8-8s3.582-8 8-8 8 3.582 8 8-3.582 8-8 8z"></path></svg></div><div class="auto-search-wrapper max-height"><input type="text" id="marker" autocomplete="off"  aria-describedby="instruction" aria-label="Search ..." /><div id="instruction" class="hidden">When autocomplete results are available use up and down arrows to review and enter to select. Touch device users, explore by touch or with swipe gestures.</div></div>`;
@@ -224,8 +267,6 @@
                     .querySelector(".leaflet-autocomplete")
                     .classList.remove("active-autocomplete");
 
-
-
                 clickOnClearButton();
             });
 
@@ -235,8 +276,8 @@
 
             new Autocomplete("marker", {
                 delay: 1000,
-                selectFirst: true,
                 howManyCharacters: 2,
+
 
                 onSearch: function ({ currentValue }) {
                     const api = `https://nominatim.openstreetmap.org/search?format=geojson&limit=5&q=${encodeURI(
@@ -293,12 +334,13 @@
                     });
 
                     searchedLat=cord[1];
-                    searchedLong=cord[2];
+                    searchedLong=cord[0];
 
                     // add marker
                     const marker = L.marker([cord[1], cord[0]], {
                         title: display_name,
                     });
+
 
                     // add marker to map
                     marker.addTo(map).bindPopup(display_name);
@@ -310,6 +352,8 @@
                     L.DomUtil.addClass(marker._icon, "leaflet-marker-locate");
 
                     document.getElementById("dest-confirm").style.visibility = "visible"
+
+                    console.log("lat: " + searchedLat +"; long: " + searchedLong);
 
                 },
 
@@ -328,26 +372,11 @@
 
 </head>
 <body class="fullscreen">
+<!--
+<div id="backdrop" class="fullscreen" style="background: transparent; visibility: hidden; z-index: 1499; position: absolute"></div>
+-->
 <div class="leaflet-container fullscreen">
 
-
-    <!--
-    <div class="toolbar">
-        <input type="text" placeholder="Cerca la tua Destinazione" class="toolbar-input">
-    </div>
-
-    <div class="auto-search-wrapper toolbar" id="search">
-        <input
-                type="text"
-                autocomplete="off"
-                id="marker"
-                class="toolbar-input"
-                aria-describedby="instruction"
-                aria-label="Search ..."
-        />
-    </div>
-
-    -->
 
 
     <div id="dest-confirm" class="confirm-dest-button-container">
