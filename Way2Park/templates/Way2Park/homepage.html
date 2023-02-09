@@ -138,6 +138,8 @@
 
         let searchedLat;
         let searchedLong;
+        let positionLat;
+        let positionLong;
 
 
         window.addEventListener("map:init", function (e) {
@@ -152,7 +154,8 @@
             navigator.geolocation.getCurrentPosition(function(position) {
                 map.setView([position.coords.latitude, position.coords.longitude]);
                 L.marker([position.coords.latitude, position.coords.longitude],{icon: customPositionMarkerIcon}).addTo(map);
-
+                positionLat = position.coords.latitude;
+                positionLong = position.coords.longitude;
             });
 
             const customIcon = L.icon({
