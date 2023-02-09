@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 {% load leaflet_tags %}
 {% load static %}
-<html lang="en">
+<html lang="en" xmlns="http://www.w3.org/1999/html">
 <head>
     <meta charset="UTF-8">
     <meta name="theme-color" content="#000000">
@@ -10,11 +10,10 @@
     {% leaflet_js %}
     {% leaflet_css %}
 
-    <link rel="stylesheet" href="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.css" />
-    <script src="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.js"></script>
-
-
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/tomik23/autocomplete@1.8.3/dist/css/autocomplete.min.css"/>
+    <script src="https://cdn.jsdelivr.net/gh/tomik23/autocomplete@1.8.3/dist/js/autocomplete.min.js"></script>
     <style>
+
 
 
 
@@ -32,7 +31,8 @@
 
         .toolbar{
             margin-top: 3vh;
-            margin-left: 10vw;
+
+            margin-left: calc(10vw - 10px);
             margin-right: 10vw;
             width: 80vw;
             height: 10vh;
@@ -46,14 +46,16 @@
         }
 
         .toolbar-input{
-            width: 80%;
+            width: 70vw;
             height: 60%;
             border: none;
             border-bottom: 2px solid #4ca4dc;
             font-size: min(20px,3vh);
             color: #4ca4dc;
             background: transparent;
+
         }
+
 
         input:focus,
         select:focus,
@@ -73,18 +75,69 @@
             border-radius: 10px;
         }
 
-        .btn{
+        .confirm-dest-button-container{
+            visibility: hidden;
+            position: absolute;
+            width: 75px;
+            height: 75px;
+            z-index: 1000;
+            bottom: 5vh;
+            left: 5vh;
+            background-color: #1c3357;
+            border-radius: 10px;
+        }
+
+        .btn-confirm{
+            width: 80%;
+            height: 80%;
+            background: url('{% static 'parkingIcon.svg'%}' ) no-repeat 0 0;
+            margin: 10%;
+            border: none;
+            background-size: 100%;
+        }
+
+        .btn-credit{
             width: 90%;
             height: 90%;
             background: url('{% static 'creditcard.svg'%}' ) no-repeat 0 0;
             margin: 5%;
+            border: none;
         }
+
+        .auto-results-wrapper{
+            position: absolute;
+            top: calc(100% + 5px);
+            border: 1px solid #858585;
+        }
+
+        .popup-marker{
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            border-radius: 10px;
+            width: 60vw;
+            height: 40vh;
+            background-color: #1c3357;
+            color: #4ca4dc;
+            z-index: 1500;
+            display: grid;
+            grid-template-rows: 2fr 1fr 1fr ;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+        }
+
 
 
     </style>
 
 
     <script>
+
+
+        let searchedLat;
+        let searchedLong;
 
 
         window.addEventListener("map:init", function (e) {
@@ -99,6 +152,7 @@
             navigator.geolocation.getCurrentPosition(function(position) {
                 map.setView([position.coords.latitude, position.coords.longitude]);
                 L.marker([position.coords.latitude, position.coords.longitude],{icon: customPositionMarkerIcon}).addTo(map);
+
             });
 
             const customIcon = L.icon({
@@ -106,15 +160,208 @@
                 iconSize: [30, 50]
             });
 
+
             {% for p in lista_parcheggi %}
-                L.marker([ {{ p.lat }}, {{ p.long }}], {icon: customIcon}).addTo(map);
+
+                var disponibili = {{ p.capienza }} - {{ p.occupazione }};
+
+                var popupContent = `
+                <div class="popup-marker" id="popup">
+                    <h1 style:"margin-top:5px;">Indirizzo:<br>{{ p.indirizzo }}</h1>
+                    <p>Disponibilità:<br>` + disponibili.toString() + `/{{ p.capienza }}</p>
+                    <p>Tariffa Oraria:<br> {{ p.costo }} €</p>
+                </div>`;
+
+                var marker = L.marker([{{ p.lat}}, {{p.long}}], {icon: customIcon}).addTo(map);
+                marker.bindPopup(popupContent);
+                marker.on('click', function (){
+                    map.setView([{{ p.lat }}, {{ p.long }}], 15);
+                })
+
             {% endfor %}
 
 
-            L.Control.geocoder({
-                defaultMarkGeocode: false,
-                geocoder: L.Control.Geocoder.nominatim()
-            }).addTo(map);
+
+
+            //const buttonTemplate = `<div class="leaflet-search" style="height: 15px; width: 15px"><svg version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"><path d="M31.008 27.231l-7.58-6.447c-0.784-0.705-1.622-1.029-2.299-0.998 1.789-2.096 2.87-4.815 2.87-7.787 0-6.627-5.373-12-12-12s-12 5.373-12 12 5.373 12 12 12c2.972 0 5.691-1.081 7.787-2.87-0.031 0.677 0.293 1.515 0.998 2.299l6.447 7.58c1.104 1.226 2.907 1.33 4.007 0.23s0.997-2.903-0.23-4.007zM12 20c-4.418 0-8-3.582-8-8s3.582-8 8-8 8 3.582 8 8-3.582 8-8 8z"></path></svg></div><div class="auto-search-wrapper max-height"><input type="text" id="marker" autocomplete="off"  aria-describedby="instruction" aria-label="Search ..." /><div id="instruction" class="hidden">When autocomplete results are available use up and down arrows to review and enter to select. Touch device users, explore by touch or with swipe gestures.</div></div>`;
+
+            const barTemplate = `
+                <div class="leaflet-search toolbar" id="search">
+                    <input
+                        type="text"
+                        autocomplete="off"
+                        id="marker"
+                        class="toolbar-input"
+                        placeholder="Search ..."
+                    />
+                </div>`;
+
+
+// create custom button
+            const customControl = L.Control.extend({
+                // button position
+                options: {
+                    position: "topleft",
+                    className: "leaflet-autocomplete"
+                },
+
+                // method
+                onAdd: function () {
+                    return this._initialLayout();
+                },
+
+                _initialLayout: function () {
+                    // create button
+                    const container = L.DomUtil.create(
+                        "div",
+                        "leaflet-bar " + this.options.className
+                    );
+
+                    L.DomEvent.disableClickPropagation(container);
+
+                    container.innerHTML = barTemplate;
+
+                    return container;
+                },
+            });
+
+// adding new button to map controll
+            map.addControl(new customControl());
+
+// --------------------------------------------------------------
+
+// input element
+            const root = document.getElementById("marker");
+
+            function addClassToParent() {
+                const searchBtn = document.querySelector(".leaflet-search");
+                searchBtn.addEventListener("click", (e) => {
+                    // toggle class
+                    e.target
+                        .closest(".leaflet-autocomplete")
+                        .classList.toggle("active-autocomplete");
+
+                    // add placeholder
+                    root.placeholder = "Search ...";
+
+                    // focus on input
+                    root.focus();
+
+                    // click on clear button
+                    clickOnClearButton();
+                });
+            }
+
+// function click on clear button
+            function clickOnClearButton() {
+                document.querySelector(".auto-clear").click();
+
+            }
+
+            addClassToParent();
+
+// function clear input
+            map.on("click", () => {
+
+                document
+                    .querySelector(".leaflet-autocomplete")
+                    .classList.remove("active-autocomplete");
+
+                clickOnClearButton();
+            });
+
+// autocomplete section
+// more config find in https://github.com/tomik23/autocomplete
+// --------------------------------------------------------------
+
+            new Autocomplete("marker", {
+                delay: 1000,
+                howManyCharacters: 2,
+
+
+                onSearch: function ({ currentValue }) {
+                    const api = `https://nominatim.openstreetmap.org/search?format=geojson&limit=5&q=${encodeURI(
+                        currentValue
+                    )}`;
+
+                    /**
+                     * Promise
+                     */
+                    return new Promise((resolve) => {
+                        fetch(api)
+                            .then((response) => response.json())
+                            .then((data) => {
+                                resolve(data.features);
+                            })
+                            .catch((error) => {
+                                console.error(error);
+                            });
+                    });
+                },
+
+                onResults: ({ currentValue, matches, template }) => {
+                    const regex = new RegExp(currentValue, "i");
+                    // checking if we have results if we don't
+                    // take data from the noResults method
+                    return matches === 0
+                        ? template
+                        : matches
+                            .map((element) => {
+                                return `
+              <li role="option">
+                <p>${element.properties.display_name.replace(
+                                    regex,
+                                    (str) => `<b>${str}</b>`
+                                )}</p>
+              </li> `;
+                            })
+                            .join("");
+                },
+
+                onSubmit: ({ object }) => {
+                    const { display_name } = object.properties;
+                    const cord = object.geometry.coordinates;
+                    // custom id for marker
+                    // const customId = Math.random();
+
+                    // remove last marker
+                    map.eachLayer(function (layer) {
+                        if (layer.options && layer.options.pane === "markerPane") {
+                            if (layer._icon.classList.contains("leaflet-marker-locate")) {
+                                map.removeLayer(layer);
+                            }
+                        }
+                    });
+
+                    searchedLat=cord[1];
+                    searchedLong=cord[0];
+
+                    // add marker
+                    const marker = L.marker([cord[1], cord[0]], {
+                        title: display_name,
+                    });
+
+
+                    // add marker to map
+                    marker.addTo(map).bindPopup(display_name);
+
+                    // set marker to coordinates
+                    map.setView([cord[1], cord[0]],15);
+
+                    // add class to marker
+                    L.DomUtil.addClass(marker._icon, "leaflet-marker-locate");
+
+                    document.getElementById("dest-confirm").style.visibility = "visible"
+
+                    console.log("lat: " + searchedLat +"; long: " + searchedLong);
+
+                },
+
+                // the method presents no results
+                noResults: ({ currentValue, template }) =>
+                    template(`<li>No results found: "${currentValue}"</li>`),
+            });
+
 
 
         }, false);
@@ -125,16 +372,20 @@
 
 </head>
 <body class="fullscreen">
+<!--
+<div id="backdrop" class="fullscreen" style="background: transparent; visibility: hidden; z-index: 1499; position: absolute"></div>
+-->
 <div class="leaflet-container fullscreen">
 
 
-    <div class="toolbar">
-        <input type="text" placeholder="Cerca la tua Destinazione" class="toolbar-input">
+
+    <div id="dest-confirm" class="confirm-dest-button-container">
+        <button class="btn-confirm"></button>
     </div>
 
 
     <div class="credit-card-button-container">
-        <button class="btn" onclick="window.location='link';"></button>
+        <button class="btn-credit" onclick="window.location='link';"></button>
     </div>
 
     {% leaflet_map "main"%}
