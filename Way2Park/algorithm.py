@@ -1,6 +1,6 @@
 import requests
 from geopy.distance import geodesic
-from models import Parcheggio
+from .models import Parcheggio
 
 '''
 input: 
@@ -30,6 +30,7 @@ ritorna bestPark, freePark e nearestPark
 #      'address': 'Piazza dei Servi'}
 # ]
 parcheggi = Parcheggio.objects.all()
+parcheggi =  [p.__dict__ for p in parcheggi]
 
 # università del seminario viale timavo
 searchedLat = 44.693479
@@ -100,12 +101,12 @@ def main(searchedLat, searchedLong, positionLat, positionLong):
                                                                     park['long'])
         park_info = {
             'id': park['id'],
-            'address': park['address'],
+            'address': park['indirizzo'],
             'lat': park['lat'],
             'long': park['long'],
-            'capacity': park['capacity'],
-            'occupancy': park['occupancy'],
-            'cost': park['cost'],
+            'capacity': park['capienza'],
+            'occupancy': park['occupazione'],
+            'cost': park['costo'],
             'walking_distance': walking_distance,
             'walking_time': walking_time,
             'driving_distance': driving_distance,
@@ -141,7 +142,7 @@ def main(searchedLat, searchedLong, positionLat, positionLong):
 
     for park in parks:
         park['vicinanza'] = 0 if park['walking_distance'] <= 300 else (park['walking_distance'] - 300) // 100 + 1
-        percentage = (park['capacity'] - park['occupancy']) / park['capacity'] * 100
+        percentage = (park['occupancy']) / park['capacity'] * 100
         if percentage <= 70:
             park['disponibilità'] = 0
         elif percentage <= 80:

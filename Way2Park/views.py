@@ -8,7 +8,7 @@ from django.views.decorators.csrf import csrf_exempt
 
 from .models import Parcheggio, MetodoPagamento, Targa, Posteggio
 from django.http import HttpResponse
-import algorithm
+from . import algorithm
 
 
 def index(request):
@@ -108,12 +108,13 @@ def payPosteggio(request):
     response.status_code = 213  # sample status code
     return response
 
-
+@csrf_exempt
 def resourcesLoad(request):
-    sLat = request.POST["sLat"]
-    sLong = request.POST["sLong"]
-    pLat = request.POST["pLat"]
-    pLong = request.POST["pLong"]
+
+    sLat = request.POST.get("sLat")
+    sLong = request.POST.get("sLong")
+    pLat = request.POST.get("pLat")
+    pLong = request.POST.get("pLong")
     parks = algorithm.main(sLat, sLong, pLat, pLong)
 
     context = {
@@ -122,4 +123,4 @@ def resourcesLoad(request):
         'best_park': parks[2]
     }
 
-    return render(request, 'results.html', context=context)
+    return render(request, 'Way2Park/results.html', context=context)

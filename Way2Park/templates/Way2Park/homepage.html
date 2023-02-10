@@ -366,25 +366,13 @@
         }, false);
 
         function redirection() {
-            fetch("http://w2p.northeurope.cloudapp.azure.com:8000/resources", {
-                method: "POST",
-                body: JSON.stringify({
-                    userId: 1,
-                    title: "Fix my bugs",
-                    completed: false,
-                    sLat: searchedLat,
-                    sLong: searchedLong,
-                    pLat: positionLat,
-                    pLong: positionLong,
-                }),
-                headers: {
-                    "Content-type": "application/json; charset=UTF-8",
+            form = document.getElementById("redirection");
 
-
-                }
-            }).then(response => console.log(response))
-            .catch(error => console.error(error));
-
+            document.getElementsByName("sLat")[0].value = searchedLat;
+            document.getElementsByName("sLong")[0].value = searchedLong;
+            document.getElementsByName("pLat")[0].value = positionLat;
+            document.getElementsByName("pLong")[0].value = positionLong;
+            form.submit();
         }
 
     </script>
@@ -411,6 +399,14 @@
 
     {% leaflet_map "main" %}
 </div>
+{% csrf_token %}
+<form action="{% url 'resources' %}" hidden id="redirection" method="POST">
+    <input type="hidden" name="sLat" >
+    <input type="hidden" name="sLong" >
+    <input type="hidden" name="pLat" >
+    <input type="hidden" name="pLong" >
+
+</form>
 
 </body>
 </html>

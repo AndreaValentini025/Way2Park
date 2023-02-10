@@ -10,4 +10,5 @@ urlpatterns = [
     path('posteggio', views.createPosteggio, name='posteggio'),
     path('payPosteggio', views.payPosteggio, name='payPosteggio'),
     path('resources', views.resourcesLoad, name='resources'),
+    path('resources', views.resourcesLoad, name='resources'),
 ]
