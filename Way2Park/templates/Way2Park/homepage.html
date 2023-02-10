@@ -6,7 +6,7 @@
     <meta charset="UTF-8">
     <meta name="theme-color" content="#000000">
     <title>Title</title>
-    <link rel="stylesheet" href="{% static 'bootstrap/css/bootstrap.min.css'%}">
+    <link rel="stylesheet" href="{% static 'bootstrap/css/bootstrap.min.css' %}">
     {% leaflet_js %}
     {% leaflet_css %}
 
@@ -15,21 +15,19 @@
     <style>
 
 
-
-
-        .fullscreen{
+        .fullscreen {
             height: 100vh;
             width: 100vw;
         }
 
-        #main{
+        #main {
             position: absolute;
             height: 100vh;
             width: 100vw;
             z-index: 1;
         }
 
-        .toolbar{
+        .toolbar {
             margin-top: 3vh;
 
             margin-left: calc(10vw - 10px);
@@ -45,12 +43,12 @@
             align-items: center;
         }
 
-        .toolbar-input{
+        .toolbar-input {
             width: 70vw;
             height: 60%;
             border: none;
             border-bottom: 2px solid #4ca4dc;
-            font-size: min(20px,3vh);
+            font-size: min(20px, 3vh);
             color: #4ca4dc;
             background: transparent;
 
@@ -64,7 +62,7 @@
             outline: none;
         }
 
-        .credit-card-button-container{
+        .credit-card-button-container {
             position: absolute;
             width: 75px;
             height: 75px;
@@ -75,7 +73,7 @@
             border-radius: 10px;
         }
 
-        .confirm-dest-button-container{
+        .confirm-dest-button-container {
             visibility: hidden;
             position: absolute;
             width: 75px;
@@ -87,30 +85,30 @@
             border-radius: 10px;
         }
 
-        .btn-confirm{
+        .btn-confirm {
             width: 80%;
             height: 80%;
-            background: url('{% static 'parkingIcon.svg'%}' ) no-repeat 0 0;
+            background: url('{% static 'parkingIcon.svg'%}') no-repeat 0 0;
             margin: 10%;
             border: none;
             background-size: 100%;
         }
 
-        .btn-credit{
+        .btn-credit {
             width: 90%;
             height: 90%;
-            background: url('{% static 'creditcard.svg'%}' ) no-repeat 0 0;
+            background: url('{% static 'creditcard.svg'%}') no-repeat 0 0;
             margin: 5%;
             border: none;
         }
 
-        .auto-results-wrapper{
+        .auto-results-wrapper {
             position: absolute;
             top: calc(100% + 5px);
             border: 1px solid #858585;
         }
 
-        .popup-marker{
+        .popup-marker {
             position: absolute;
             top: 50%;
             left: 50%;
@@ -122,12 +120,11 @@
             color: #4ca4dc;
             z-index: 1500;
             display: grid;
-            grid-template-rows: 2fr 1fr 1fr ;
+            grid-template-rows: 2fr 1fr 1fr;
             justify-content: center;
             align-items: center;
             text-align: center;
         }
-
 
 
     </style>
@@ -151,9 +148,9 @@
                 iconUrl: '{% static 'position.svg'%}',
                 iconAnchor: [29.5, 29.5]
             })
-            navigator.geolocation.getCurrentPosition(function(position) {
+            navigator.geolocation.getCurrentPosition(function (position) {
                 map.setView([position.coords.latitude, position.coords.longitude]);
-                L.marker([position.coords.latitude, position.coords.longitude],{icon: customPositionMarkerIcon}).addTo(map);
+                L.marker([position.coords.latitude, position.coords.longitude], {icon: customPositionMarkerIcon}).addTo(map);
                 positionLat = position.coords.latitude;
                 positionLong = position.coords.longitude;
             });
@@ -177,7 +174,7 @@
 
                 var marker = L.marker([{{ p.lat}}, {{p.long}}], {icon: customIcon}).addTo(map);
                 marker.bindPopup(popupContent);
-                marker.on('click', function (){
+                marker.on('click', function () {
                     map.setView([{{ p.lat }}, {{ p.long }}], 15);
                 })
 
@@ -282,7 +279,7 @@
                 howManyCharacters: 2,
 
 
-                onSearch: function ({ currentValue }) {
+                onSearch: function ({currentValue}) {
                     const api = `https://nominatim.openstreetmap.org/search?format=geojson&limit=5&q=${encodeURI(
                         currentValue
                     )}`;
@@ -302,7 +299,7 @@
                     });
                 },
 
-                onResults: ({ currentValue, matches, template }) => {
+                onResults: ({currentValue, matches, template}) => {
                     const regex = new RegExp(currentValue, "i");
                     // checking if we have results if we don't
                     // take data from the noResults method
@@ -321,8 +318,8 @@
                             .join("");
                 },
 
-                onSubmit: ({ object }) => {
-                    const { display_name } = object.properties;
+                onSubmit: ({object}) => {
+                    const {display_name} = object.properties;
                     const cord = object.geometry.coordinates;
                     // custom id for marker
                     // const customId = Math.random();
@@ -336,8 +333,8 @@
                         }
                     });
 
-                    searchedLat=cord[1];
-                    searchedLong=cord[0];
+                    searchedLat = cord[1];
+                    searchedLong = cord[0];
 
                     // add marker
                     const marker = L.marker([cord[1], cord[0]], {
@@ -349,28 +346,48 @@
                     marker.addTo(map).bindPopup(display_name);
 
                     // set marker to coordinates
-                    map.setView([cord[1], cord[0]],15);
+                    map.setView([cord[1], cord[0]], 15);
 
                     // add class to marker
                     L.DomUtil.addClass(marker._icon, "leaflet-marker-locate");
 
                     document.getElementById("dest-confirm").style.visibility = "visible"
 
-                    console.log("lat: " + searchedLat +"; long: " + searchedLong);
+                    console.log("lat: " + searchedLat + "; long: " + searchedLong);
 
                 },
 
                 // the method presents no results
-                noResults: ({ currentValue, template }) =>
+                noResults: ({currentValue, template}) =>
                     template(`<li>No results found: "${currentValue}"</li>`),
             });
 
 
-
         }, false);
+
+        function redirection() {
+            fetch("http://w2p.northeurope.cloudapp.azure.com:8000/resources", {
+                method: "POST",
+                body: JSON.stringify({
+                    userId: 1,
+                    title: "Fix my bugs",
+                    completed: false,
+                    sLat: searchedLat,
+                    sLong: searchedLong,
+                    pLat: positionLat,
+                    pLong: positionLong,
+                }),
+                headers: {
+                    "Content-type": "application/json; charset=UTF-8",
+
+
+                }
+            }).then(response => console.log(response))
+            .catch(error => console.error(error));
+
+        }
+
     </script>
-
-
 
 
 </head>
@@ -381,19 +398,18 @@
 <div class="leaflet-container fullscreen">
 
 
-
     <div id="dest-confirm" class="confirm-dest-button-container">
-        <button class="btn-confirm"></button>
+        <button class="btn-confirm" onclick="redirection()"></button>
     </div>
 
 
     <div class="credit-card-button-container">
 
-        <button class="btn" onclick="window.location='{% url 'link' %}';"></button>
+        <button class="btn-credit" onclick="window.location='{% url 'link' %}';"></button>
 
     </div>
 
-    {% leaflet_map "main"%}
+    {% leaflet_map "main" %}
 </div>
 
 </body>

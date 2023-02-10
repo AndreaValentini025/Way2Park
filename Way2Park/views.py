@@ -8,6 +8,7 @@ from django.views.decorators.csrf import csrf_exempt
 
 from .models import Parcheggio, MetodoPagamento, Targa, Posteggio
 from django.http import HttpResponse
+import algorithm
 
 
 def index(request):
@@ -70,7 +71,7 @@ def createPosteggio(request):
         posteggio.targa = targa
         posteggio.parcheggio = parcheggio
         posteggio.ingresso = datetime.now()
-        posteggio.parcheggio.occupazione+=1
+        posteggio.parcheggio.occupazione += 1
         posteggio.save()
 
         response = HttpResponse('INIZIO Posteggio registrato correttamente!')
@@ -80,9 +81,9 @@ def createPosteggio(request):
         posteggio.uscita = datetime.now()
         tempo_post = posteggio.uscita - posteggio.ingresso
         posteggio.spesa = tempo_post.total_seconds().__floor__() * (posteggio.parcheggio.costo / 3600)
-        if posteggio.targa.metodo_pagamento :
+        if posteggio.targa.metodo_pagamento:
             posteggio.targa.metodo_pagamento.saldo -= posteggio.spesa
-            posteggio.pagamento=True
+            posteggio.pagamento = True
             posteggio.parcheggio.occupazione -= 1
             posteggio.save()
             response = HttpResponse('TERMINE Posteggio registrato correttamente!')
@@ -97,9 +98,10 @@ def createPosteggio(request):
             response.headers['id_post'] = posteggio.id
             return response
 
+
 def payPosteggio(request):
     posteggio = Posteggio.objects.get(id__exact=request.POST["id_post"])
-    posteggio.pagamento=True
+    posteggio.pagamento = True
     posteggio.parcheggio.occupazione -= 1
     posteggio.save()
     response = HttpResponse('Pagamento Posteggio registrato correttamente!')
@@ -107,6 +109,17 @@ def payPosteggio(request):
     return response
 
 
+def resourcesLoad(request):
+    sLat = request.POST["sLat"]
+    sLong = request.POST["sLong"]
+    pLat = request.POST["pLat"]
+    pLong = request.POST["pLong"]
+    parks = algorithm.main(sLat, sLong, pLat, pLong)
 
+    context = {
+        'free_park': parks[0],
+        'nearest_park': parks[1],
+        'best_park': parks[2]
+    }
 
-
+    return render(request, 'results.html', context=context)
