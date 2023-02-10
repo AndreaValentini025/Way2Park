@@ -132,5 +132,3 @@ LEAFLET_CONFIG = {
     'TILES': 'http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
     'RESET_VIEW': False,
 }
-
-
