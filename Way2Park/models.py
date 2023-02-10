@@ -35,7 +35,8 @@ class Targa(models.Model):
 class Posteggio(models.Model):
     parcheggio = models.ForeignKey(Parcheggio, on_delete=models.DO_NOTHING)
     targa = models.ForeignKey(Targa, on_delete=models.DO_NOTHING)
-    ingresso = models.DateTimeField(auto_now_add=True)
-    uscita = models.DateTimeField(auto_now=True)
+    ingresso = models.DateTimeField()
+    uscita = models.DateTimeField()
+    spesa = models.DecimalField(decimal_places=2, max_digits=5, default=0)
     pagamento = models.BooleanField(default=False)
 
