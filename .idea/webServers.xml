@@ -2,10 +2,10 @@
 <project version="4">
   <component name="WebServers">
     <option name="servers">
-      <webServer id="8a10d14f-5873-4788-a634-e65bc9631746" name="AzureApp" url="https://way2park.azurewebsites.net">
-        <fileTransfer rootFolder="/site/wwwroot" accessType="FTPS" host="waws-prod-blu-403.ftp.azurewebsites.windows.net" port="21">
+      <webServer id="cc3bd3f6-f73a-4710-a005-217e377ec941" name="Way2Park" url="http://20.67.241.225:8000">
+        <fileTransfer rootFolder="/home/w2p" accessType="SFTP" host="20.67.241.225" port="22" sshConfigId="f8de4a5c-eb5a-4d21-b040-7c88b86ce13d" sshConfig="w2p@20.67.241.225:22 key" keyPair="true">
           <advancedOptions>
-            <advancedOptions dataProtectionLevel="Private" passiveMode="true" shareSSLContext="true" />
+            <advancedOptions dataProtectionLevel="Private" keepAliveTimeout="0" passiveMode="true" shareSSLContext="true" />
           </advancedOptions>
         </fileTransfer>
       </webServer>

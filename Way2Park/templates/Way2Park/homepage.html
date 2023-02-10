@@ -388,7 +388,9 @@
 
 
     <div class="credit-card-button-container">
-        <button class="btn-credit" onclick="window.location='link';"></button>
+
+        <button class="btn" onclick="window.location='{% url 'link' %}';"></button>
+
     </div>
 
     {% leaflet_map "main"%}
