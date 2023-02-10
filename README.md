@@ -4,7 +4,7 @@
 
 Our app searches for parking spaces based on occupancy and distance, providing the user with optimal choices.
 
-The application was built using Django and is available at https://way2park.azurewebsites.net/.
+The application was built using Django and is available at http://w2p.northeurope.cloudapp.azure.com:8000/
 
 *Try Way2Park today and make parking a hassle-free experience!*
 
