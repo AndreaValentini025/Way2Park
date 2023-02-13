@@ -2,12 +2,109 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+    <title>Parcheggi</title>
+
+    <style>
+        .form-group{
+            margin: 30px 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .btn{
+            padding: 10px 20px;
+            background-color: #4ca4dc;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            margin-top: 20px;
+        }
+    </style>
+
+    <script>
+        var nearestWalkingTime = {{ nearest_park.walking_time }} ;
+        var nearestDrivingTime = {{ nearest_park.driving_time }} ;
+        var nearestWalkingTimeInMinutes = Math.round( (nearestWalkingTime +30 )/ 60 ) ;
+        var nearestDrivingTimeInMinutes = Math.round( (nearestDrivingTime +30 ) / 60 ) ;
+
+
+        var freeWalkingTime = {{ free_park.walking_time }} ;
+        var freeDrivingTime = {{ free_park.driving_time }} ;
+        var freeWalkingTimeInMinutes = Math.round( (freeWalkingTime+30) / 60 ) ;
+        var freeDrivingTimeInMinutes = Math.round( (freeDrivingTime+30) / 60 ) ;
+
+
+        var bestWalkingTime = {{ best_park.walking_time }} ;
+        var bestDrivingTime = {{ best_park.driving_time }} ;
+        var bestWalkingTimeInMinutes = Math.round( (bestWalkingTime+30) / 60 ) ;
+        var bestDrivingTimeInMinutes = Math.round( (bestDrivingTime+30) / 60 ) ;
+
+
+
+    </script>
+
 </head>
 <body>
-<p> {{ nearest_park }}</p>
-<p> {{ free_park }}</p>
-<p> {{ best_park }}</p>
-{% csrf_token %}
+<div class="container mt-5">
+    <h3 class="text-center mb-5" style="margin-bottom: 15px">Way2Park Consiglia</h3>
+    <div class="card-deck">
+        <div class="card">
+            <div class="card-header text-white text-center" style="background: #1c3357;">
+                Miglior Parcheggio
+            </div>
+            <div class="card-body">
+                <p><strong>Indirizzo:</strong> {{ best_park.address }}</p>
+                <p><strong>Occupazione:</strong> {{best_park.occupancy}} / {{ best_park.capacity }}</p>
+                <p><strong>Tratto a piedi:</strong> <span id="best-walking-time"></span> min</p>
+                <p><strong>Tratto in macchina:</strong> <span id="best-driving-time"></span> min</p>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-header bg-success text-white text-center">
+                Parcheggio Gratuito
+            </div>
+            <div class="card-body">
+                <p><strong>Indirizzo:</strong> {{ free_park.address }}</p>
+                <p><strong>Occupazione:</strong> {{free_park.occupancy}} / {{ free_park.capacity }}</p>
+                <p><strong>Tratto a piedi:</strong> <span id="free-walking-time"></span> min</p>
+                <p><strong>Tratto in macchina:</strong> <span id="free-driving-time"></span> min</p>
+
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-header text-white text-center", style="background: #DBBB42">
+                Parcheggio più Vicino
+            </div>
+            <div class="card-body">
+                <p><strong>Indirizzo:</strong> {{ nearest_park.address }}</p>
+                <p><strong>Occupazione:</strong> {{ nearest_park.occupancy}} / {{ nearest_park.capacity }}</p>
+                <p><strong>Tratto a piedi:</strong> <span id="nearest-walking-time"></span> min</p>
+                <p><strong>Tratto in macchina:</strong> <span id="nearest-driving-time"></span> min</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <button class="btn" type="button" onclick="history.back()">Indietro</button>
+    </div>
+
+</div>
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous"></script>
+<script>
+    document.getElementById("nearest-walking-time").innerHTML = nearestWalkingTimeInMinutes.toString();
+    document.getElementById("nearest-driving-time").innerHTML = nearestDrivingTimeInMinutes.toString();
+    document.getElementById("free-walking-time").innerHTML = freeWalkingTimeInMinutes.toString();
+    document.getElementById("free-driving-time").innerHTML = freeDrivingTimeInMinutes.toString();
+    document.getElementById("best-walking-time").innerHTML = bestWalkingTimeInMinutes.toString();
+    document.getElementById("best-driving-time").innerHTML = bestDrivingTimeInMinutes.toString();
+</script>
 </body>
+
 </html>

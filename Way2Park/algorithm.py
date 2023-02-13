@@ -74,7 +74,7 @@ def calculate_walking_distance(park_lat, park_long, searched_lat, searched_long)
 # calcola distanza in macchina e tempo di percorrenza dalla posizione attuale al parcheggio
 def calculate_driving_distance(pos_lat, pos_long, park_lat, park_long):
     base_url = "http://router.project-osrm.org/route/v1/car/"
-    coordinates = str(pos_long) + "," + str(pos_lat) + ";" + str(park_long) + "," + str(pos_lat)
+    coordinates = str(pos_long) + "," + str(pos_lat) + ";" + str(park_long) + "," + str(park_lat)
     response = requests.get(base_url + coordinates)
     if response.status_code == 200:
         result = response.json()
