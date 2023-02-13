@@ -48,7 +48,7 @@
             height: 60%;
             border: none;
             border-bottom: 2px solid #4ca4dc;
-            font-size: min(20px, 3vh);
+            font-size: 20px;
             color: #4ca4dc;
             background: transparent;
 
@@ -109,6 +109,7 @@
         }
 
         .popup-marker {
+            font-size: 20px;
             position: absolute;
             top: 50%;
             left: 50%;
@@ -167,7 +168,7 @@
 
                 var popupContent = `
                 <div class="popup-marker" id="popup">
-                    <h1 style:"margin-top:5px;">Indirizzo:<br>{{ p.indirizzo }}</h1>
+                    <h1 style:"margin-top:5px;">{{ p.indirizzo }}</h1>
                     <p>Disponibilità:<br>` + disponibili.toString() + `/{{ p.capienza }}</p>
                     <p>Tariffa Oraria:<br> {{ p.costo }} €</p>
                 </div>`;
