@@ -12,7 +12,55 @@
 
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/tomik23/autocomplete@1.8.3/dist/css/autocomplete.min.css"/>
     <script src="https://cdn.jsdelivr.net/gh/tomik23/autocomplete@1.8.3/dist/js/autocomplete.min.js"></script>
+
+
+    <!--
+
+
+    -->
+
+
     <style>
+
+        /*
+        Il problema di visualizzazione su dispositivi mobili può essere risolto aggiungendo delle media queries CSS
+        per adattare il layout dell'applicazione alle dimensioni dello schermo del dispositivo.
+        */
+        @media screen and (max-width: 480px) {
+            .leaflet-search.toolbar {
+                width: 90%;
+            }
+
+            .toolbar-input {
+                width: 100%;
+                height: 40px;
+                font-size: 16px;
+            }
+
+            .leaflet-search.toolbar .search-icon {
+                display: none;
+            }
+        }
+
+
+
+        /*
+        Inoltre, per quanto riguarda il problema di zoom sulla barra di ricerca sui dispositivi iOS,
+        potresti provare a disabilitare lo zoom quando l'utente interagisce con l'input di ricerca utilizzando le seguenti proprietà CSS:
+         */
+
+        input#marker {
+            touch-action: manipulation;
+            -webkit-user-select: none;
+            -webkit-user-drag: none;
+            -webkit-tap-highlight-color: rgba(0,0,0,0);
+        }
+
+
+        /*
+        in caso non funzioni rimuovere il testo precedente
+         */
+
 
 
         .fullscreen {
