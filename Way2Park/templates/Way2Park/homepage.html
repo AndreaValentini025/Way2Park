@@ -210,12 +210,16 @@
                 iconAnchor: [40, 40],
                 iconSize: [80,80]
             })
+
+
             navigator.geolocation.getCurrentPosition(function (position) {
+
                 map.setView([position.coords.latitude, position.coords.longitude], 17);
                 L.marker([position.coords.latitude, position.coords.longitude], {icon: customPositionMarkerIcon}).addTo(map);
                 positionLat = position.coords.latitude;
                 positionLong = position.coords.longitude;
             });
+
 
             const customIcon = L.icon({
                 iconUrl: '{% static 'parkIcon.png'%}',

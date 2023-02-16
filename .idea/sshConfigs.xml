@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="SshConfigs">
+    <configs>
+      <sshConfig host="20.67.241.225" id="f8de4a5c-eb5a-4d21-b040-7c88b86ce13d" keyPath="$USER_HOME$/Scaricati/Way2Park_key.pem" port="22" nameFormat="DESCRIPTIVE" username="w2p" useOpenSSHConfig="true" />
+    </configs>
+  </component>
+</project>
