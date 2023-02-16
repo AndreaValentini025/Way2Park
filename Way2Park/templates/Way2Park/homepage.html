@@ -25,7 +25,7 @@
         /*
         Il problema di visualizzazione su dispositivi mobili può essere risolto aggiungendo delle media queries CSS
         per adattare il layout dell'applicazione alle dimensioni dello schermo del dispositivo.
-        */
+
         @media screen and (max-width: 480px) {
             .leaflet-search.toolbar {
                 width: 90%;
@@ -40,9 +40,11 @@
             .leaflet-search.toolbar .search-icon {
                 display: none;
             }
+
+
         }
 
-
+        */
 
         /*
         Inoltre, per quanto riguarda il problema di zoom sulla barra di ricerca sui dispositivi iOS,
@@ -96,7 +98,7 @@
             height: 60%;
             border: none;
             border-bottom: 2px solid #4ca4dc;
-            font-size: 20px;
+            font-size: 40px;
             color: #4ca4dc;
             background: transparent;
 
@@ -112,8 +114,8 @@
 
         .credit-card-button-container {
             position: absolute;
-            width: 75px;
-            height: 75px;
+            width: min(150px,20vw);
+            height: min(150px,20vw);
             z-index: 1000;
             bottom: 5vh;
             right: 5vh;
@@ -124,8 +126,8 @@
         .confirm-dest-button-container {
             visibility: hidden;
             position: absolute;
-            width: 75px;
-            height: 75px;
+            width: min(150px,20vw);
+            height: min(150px,20vw);
             z-index: 1000;
             bottom: 5vh;
             left: 5vh;
@@ -157,7 +159,7 @@
         }
 
         .popup-marker {
-            font-size: 20px;
+            font-size: min(3vw, 30px);
             position: absolute;
             top: 50%;
             left: 50%;
@@ -175,6 +177,16 @@
             text-align: center;
         }
 
+        .marker-p{
+            margin:5px 50px 0 50px;
+            font-size:min(3vw, 30px);
+            font-weight: bold;
+        }
+
+
+        .marker-p-bottom{
+            margin-bottom: 50px;
+        }
 
     </style>
 
@@ -195,10 +207,11 @@
             map.removeControl(map.zoomControl);
             const customPositionMarkerIcon = L.icon({
                 iconUrl: '{% static 'position.svg'%}',
-                iconAnchor: [29.5, 29.5]
+                iconAnchor: [40, 40],
+                iconSize: [80,80]
             })
             navigator.geolocation.getCurrentPosition(function (position) {
-                map.setView([position.coords.latitude, position.coords.longitude]);
+                map.setView([position.coords.latitude, position.coords.longitude], 17);
                 L.marker([position.coords.latitude, position.coords.longitude], {icon: customPositionMarkerIcon}).addTo(map);
                 positionLat = position.coords.latitude;
                 positionLong = position.coords.longitude;
@@ -206,7 +219,7 @@
 
             const customIcon = L.icon({
                 iconUrl: '{% static 'parkIcon.png'%}',
-                iconSize: [30, 50]
+                iconSize: [60, 100]
             });
 
 
@@ -216,15 +229,15 @@
 
                 var popupContent = `
                 <div class="popup-marker" id="popup">
-                    <h1 style:"margin-top:5px;">{{ p.indirizzo }}</h1>
+                    <p class="marker-p">{{ p.indirizzo }}</p>
                     <p>Disponibilità:<br>` + disponibili.toString() + `/{{ p.capienza }}</p>
-                    <p>Tariffa Oraria:<br> {{ p.costo }} €</p>
+                    <p class="marker-p-bottom">Tariffa Oraria:<br> {{ p.costo }} €</p>
                 </div>`;
 
                 var marker = L.marker([{{ p.lat}}, {{p.long}}], {icon: customIcon}).addTo(map);
                 marker.bindPopup(popupContent);
                 marker.on('click', function () {
-                    map.setView([{{ p.lat }}, {{ p.long }}], 15);
+                    map.setView([{{ p.lat }}, {{ p.long }}], 17);
                 })
 
             {% endfor %}
@@ -357,7 +370,7 @@
                         : matches
                             .map((element) => {
                                 return `
-              <li role="option">
+              <li role="option" style="height: auto; font-size: 30px">
                 <p>${element.properties.display_name.replace(
                                     regex,
                                     (str) => `<b>${str}</b>`
@@ -384,10 +397,16 @@
 
                     searchedLat = cord[1];
                     searchedLong = cord[0];
+                    const destinationIcon = L.icon({
+                        iconUrl: '{% static 'destination.png'%}',
+                        iconSize: [80, 80],
+                        iconAnchor: [40,80]
+                    });
 
                     // add marker
                     const marker = L.marker([cord[1], cord[0]], {
                         title: display_name,
+                        icon: destinationIcon
                     });
 
 
