@@ -25,3 +25,4 @@ py manage.py runserver
 ```
 # [Project Presentation](https://github.com/AndreaValentini025/Way2Park/blob/master/Way2Park.pdf)
 
+**The execution of the application has been suspended.**
