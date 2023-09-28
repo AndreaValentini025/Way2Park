@@ -23,4 +23,6 @@ To run the server on Windows use:
 ```bash
 py manage.py runserver
 ```
+# Project Presentation
 
+[Way2Park.pdf](https://github.com/AndreaValentini025/Way2Park/files/12752386/Way2Park.pdf)
